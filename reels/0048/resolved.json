@@ -1,0 +1,1904 @@
+{
+ "meta": {
+  "duration": 54.033,
+  "fps": 30,
+  "style": "obsidian",
+  "title": "5 неочевидных признаков: растёт лингвист или переводчик",
+  "language": "ru"
+ },
+ "style": {
+  "fonts": {
+   "sans": "Montserrat",
+   "accent": "Montserrat",
+   "mono": "Montserrat"
+  },
+  "fontStyle": {
+   "accent": "normal"
+  },
+  "colors": {
+   "bg": "#0C0714",
+   "bgLight": "#F3F1EC",
+   "ink": "#1B1410",
+   "white": "#FFFFFF",
+   "mid": "#6C6A64",
+   "soft": "#6F6A78",
+   "accent": "#F4CB63",
+   "accentOnDark": "#F4CB63",
+   "accent2": "#C4177F",
+   "good": "#F4CB63",
+   "bad": "#FF5468",
+   "warn": "#F0A030"
+  },
+  "head": {
+   "filter": "brightness(0.8) contrast(1.1) saturate(1.06)",
+   "tint": "rgb(222,206,236)",
+   "shadeColor": "14,9,26",
+   "topShade": 0.66,
+   "vignette": 0.62,
+   "bottomShade": 0.62,
+   "glows": [
+    {
+     "x": 12,
+     "y": 12,
+     "r": 34,
+     "rgb": "196,23,127",
+     "a": 0.26
+    },
+    {
+     "x": 92,
+     "y": 20,
+     "r": 32,
+     "rgb": "122,43,209",
+     "a": 0.2
+    }
+   ]
+  },
+  "captions": {
+   "mode": "top",
+   "font": "sans",
+   "accentFont": "sans",
+   "size": 62,
+   "accentSize": 74,
+   "weight": 700,
+   "accentWeight": 700,
+   "color": "white",
+   "accentColor": "accent",
+   "width": 960,
+   "top": 452,
+   "hookTop": 1148,
+   "hookSize": 50,
+   "max_words": 4,
+   "max_chars": 27,
+   "break_gap": 0.45
+  },
+  "scene": {
+   "bg": "dark",
+   "shiftY": 90,
+   "zoomIn": 1.05,
+   "card": {
+    "radius": 44,
+    "bg": "linear-gradient(180deg, rgba(64,55,52,0.66), rgba(26,21,22,0.8))",
+    "shadow": "0 28px 70px rgba(0,0,0,0.5), inset 0 1.5px 0 rgba(255,255,255,0.2)",
+    "border": "1.5px solid rgba(255,255,255,0.15)",
+    "blur": 26,
+    "text": "#FFFFFF",
+    "dim": "#B9AC96"
+   },
+   "header": {
+    "y": 300,
+    "sansSize": 44,
+    "accentSize": 96,
+    "accentWeight": 800
+   },
+   "glowA": "196,23,127",
+   "glowB": "122,43,209"
+  },
+  "overlay": {
+   "panel": {
+    "x": 64,
+    "w": 952,
+    "bottom": 1494,
+    "radius": 34,
+    "bg": "linear-gradient(180deg, rgba(64,55,52,0.66), rgba(26,21,22,0.78))",
+    "border": "1.5px solid rgba(255,255,255,0.15)",
+    "blur": 26,
+    "shadow": "0 28px 70px rgba(0,0,0,0.5), inset 0 1.5px 0 rgba(255,255,255,0.2)",
+    "text": "#FFFFFF",
+    "dim": "#B9AC96"
+   }
+  },
+  "hook": {
+   "y": 290,
+   "size": 68,
+   "font": "sans",
+   "weight": 900,
+   "lineHeight": 92,
+   "letterSpacing": "-0.02em",
+   "plateSize": 46
+  },
+  "chapters": {
+   "enabled": true,
+   "barY": 228,
+   "bw": true,
+   "numeral": {
+    "font": "sans",
+    "size": 780,
+    "top": 395,
+    "stroke": 7,
+    "color": "accent"
+   }
+  },
+  "transition": {
+   "kind": "none",
+   "frames": 8,
+   "blur": 0,
+   "sound": false
+  },
+  "camera": {
+   "presets": {
+    "A": 1.0,
+    "B": 1.12,
+    "C": 1.2,
+    "D": 1.28
+   },
+   "cycle": [
+    "B",
+    "D",
+    "A",
+    "C"
+   ],
+   "min_gap": 2.2
+  },
+  "music": {
+   "duck_under": "scenes"
+  },
+  "name": "obsidian",
+  "description": "Dark premium look: the speaker stays on screen, dark glass panels with gold accents sit on the lower third, a progress bar and giant outlined numerals appear BEHIND the speaker (black-and-white picture for that moment), captions above the head. Hard cuts, no push transitions."
+ },
+ "layout": {
+  "face": {
+   "x": 398,
+   "y": 715,
+   "w": 263,
+   "h": 365
+  },
+  "chin": 1095,
+  "head_top": 577,
+  "caption_top": 1129,
+  "presets": {
+   "A": {
+    "z": 1.0,
+    "cx": 540.0,
+    "cy": 960.0,
+    "chin_screen": 1095.3
+   },
+   "B": {
+    "z": 1.1,
+    "cx": 529.5,
+    "cy": 972.3,
+    "chin_screen": 1095.3
+   },
+   "C": {
+    "z": 1.18,
+    "cx": 529.5,
+    "cy": 980.6,
+    "chin_screen": 1095.3
+   },
+   "D": {
+    "z": 1.26,
+    "cx": 529.5,
+    "cy": 987.9,
+    "chin_screen": 1095.3
+   }
+  },
+  "detected": true,
+  "samples": 14
+ },
+ "words": [
+  {
+   "text": "Пять",
+   "src": 0.0,
+   "start": 0.0,
+   "end": 0.315,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "неочевидных",
+   "src": 1.22,
+   "start": 0.315,
+   "end": 1.019,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "признаков,",
+   "src": 1.98,
+   "start": 1.019,
+   "end": 1.556,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "что",
+   "src": 2.6,
+   "start": 1.593,
+   "end": 1.759,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "у",
+   "src": 2.78,
+   "start": 1.759,
+   "end": 1.809,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "вас",
+   "src": 2.8,
+   "start": 1.778,
+   "end": 2.019,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "растет",
+   "src": 3.06,
+   "start": 2.019,
+   "end": 2.426,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "преподаватель",
+   "src": 3.5,
+   "start": 2.426,
+   "end": 3.148,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "иностранных",
+   "src": 4.28,
+   "start": 3.148,
+   "end": 3.778,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "языков",
+   "src": 4.96,
+   "start": 3.778,
+   "end": 4.2,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "или",
+   "src": 5.44,
+   "start": 4.2,
+   "end": 4.478,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "переводчик.",
+   "src": 5.9,
+   "start": 4.478,
+   "end": 5.067,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "Первое.",
+   "src": 8.04,
+   "start": 5.233,
+   "end": 5.533,
+   "accent": false,
+   "hidden": true
+  },
+  {
+   "text": "Ваш",
+   "src": 8.72,
+   "start": 5.644,
+   "end": 5.793,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ребенок",
+   "src": 8.88,
+   "start": 5.793,
+   "end": 6.218,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "любит",
+   "src": 9.34,
+   "start": 6.218,
+   "end": 6.515,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "придумывать",
+   "src": 9.66,
+   "start": 6.515,
+   "end": 7.07,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "смешные",
+   "src": 10.26,
+   "start": 7.07,
+   "end": 7.607,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "слова",
+   "src": 10.84,
+   "start": 7.607,
+   "end": 7.867,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "и",
+   "src": 11.12,
+   "start": 7.867,
+   "end": 8.107,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "фразы.",
+   "src": 11.38,
+   "start": 8.107,
+   "end": 8.533,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Это",
+   "src": 12.48,
+   "start": 8.681,
+   "end": 8.83,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "может",
+   "src": 12.64,
+   "start": 8.83,
+   "end": 9.033,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "быть",
+   "src": 12.86,
+   "start": 9.033,
+   "end": 9.256,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "проявлением",
+   "src": 13.1,
+   "start": 9.256,
+   "end": 9.793,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "метаязыковой",
+   "src": 13.68,
+   "start": 9.793,
+   "end": 10.533,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "способности.",
+   "src": 14.48,
+   "start": 10.533,
+   "end": 11.333,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Второе.",
+   "src": 16.92,
+   "start": 11.361,
+   "end": 11.767,
+   "accent": false,
+   "hidden": true
+  },
+  {
+   "text": "Ваш",
+   "src": 17.96,
+   "start": 12.128,
+   "end": 12.294,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ребенок",
+   "src": 18.14,
+   "start": 12.294,
+   "end": 12.72,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "меняет",
+   "src": 18.6,
+   "start": 12.72,
+   "end": 13.091,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "интонацию,",
+   "src": 19.0,
+   "start": 13.091,
+   "end": 13.683,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "когда",
+   "src": 19.68,
+   "start": 13.72,
+   "end": 13.961,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "разговаривает",
+   "src": 19.94,
+   "start": 13.961,
+   "end": 14.591,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "с",
+   "src": 20.62,
+   "start": 14.591,
+   "end": 14.776,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "мамой,",
+   "src": 20.82,
+   "start": 14.776,
+   "end": 15.22,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "потом",
+   "src": 21.46,
+   "start": 15.369,
+   "end": 15.535,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "с",
+   "src": 21.64,
+   "start": 15.535,
+   "end": 15.683,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "бабушкой,",
+   "src": 21.8,
+   "start": 15.683,
+   "end": 16.294,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "а",
+   "src": 23.02,
+   "start": 16.383,
+   "end": 16.55,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "потом",
+   "src": 23.2,
+   "start": 16.55,
+   "end": 16.698,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "с",
+   "src": 23.36,
+   "start": 16.698,
+   "end": 16.92,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "друзьями.",
+   "src": 23.6,
+   "start": 16.92,
+   "end": 17.433,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Это",
+   "src": 24.62,
+   "start": 17.461,
+   "end": 17.776,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "показывает",
+   "src": 24.96,
+   "start": 17.776,
+   "end": 18.461,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "развитое",
+   "src": 25.7,
+   "start": 18.461,
+   "end": 19.017,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "чувство",
+   "src": 26.3,
+   "start": 19.017,
+   "end": 19.35,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "речевого",
+   "src": 26.66,
+   "start": 19.35,
+   "end": 19.85,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "контекста.",
+   "src": 27.2,
+   "start": 19.85,
+   "end": 20.5,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Третье.",
+   "src": 29.3,
+   "start": 20.62,
+   "end": 21.0,
+   "accent": false,
+   "hidden": true
+  },
+  {
+   "text": "Ваш",
+   "src": 30.34,
+   "start": 21.111,
+   "end": 21.352,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ребенок",
+   "src": 30.6,
+   "start": 21.352,
+   "end": 21.778,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "меняет",
+   "src": 31.06,
+   "start": 21.778,
+   "end": 22.185,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "интонацию,",
+   "src": 31.5,
+   "start": 22.185,
+   "end": 22.704,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "когда",
+   "src": 32.12,
+   "start": 22.759,
+   "end": 23.093,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "изображает",
+   "src": 32.48,
+   "start": 23.093,
+   "end": 24.067,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "кого",
+   "src": 33.74,
+   "start": 24.085,
+   "end": 24.382,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "-то,",
+   "src": 34.06,
+   "start": 24.382,
+   "end": 24.604,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "например,",
+   "src": 34.32,
+   "start": 24.622,
+   "end": 25.03,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "героя",
+   "src": 34.96,
+   "start": 25.215,
+   "end": 25.511,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "из",
+   "src": 35.28,
+   "start": 25.511,
+   "end": 25.678,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "мультфильма",
+   "src": 35.46,
+   "start": 25.678,
+   "end": 26.307,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "или",
+   "src": 36.14,
+   "start": 26.307,
+   "end": 26.511,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "иностранца.",
+   "src": 36.36,
+   "start": 26.511,
+   "end": 27.333,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Это",
+   "src": 38.22,
+   "start": 27.398,
+   "end": 27.639,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "указывает",
+   "src": 38.48,
+   "start": 27.639,
+   "end": 28.194,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "на",
+   "src": 39.08,
+   "start": 28.194,
+   "end": 28.435,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "фонетическую",
+   "src": 39.34,
+   "start": 28.435,
+   "end": 29.231,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "восприимчивость.",
+   "src": 40.2,
+   "start": 29.231,
+   "end": 30.1,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Четвертое.",
+   "src": 42.42,
+   "start": 30.276,
+   "end": 30.8,
+   "accent": false,
+   "hidden": true
+  },
+  {
+   "text": "Ваш",
+   "src": 43.44,
+   "start": 30.883,
+   "end": 31.05,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ребенок",
+   "src": 43.62,
+   "start": 31.05,
+   "end": 31.476,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "любит",
+   "src": 44.08,
+   "start": 31.476,
+   "end": 31.772,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "слушать",
+   "src": 44.4,
+   "start": 31.772,
+   "end": 32.18,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "песни",
+   "src": 44.84,
+   "start": 32.18,
+   "end": 32.531,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "на",
+   "src": 45.22,
+   "start": 32.531,
+   "end": 32.643,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "иностранном",
+   "src": 45.34,
+   "start": 32.643,
+   "end": 33.235,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "языке.",
+   "src": 45.98,
+   "start": 33.235,
+   "end": 33.733,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Он",
+   "src": 47.3,
+   "start": 33.789,
+   "end": 34.011,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "еще",
+   "src": 47.54,
+   "start": 34.011,
+   "end": 34.289,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "не",
+   "src": 47.84,
+   "start": 34.289,
+   "end": 34.548,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "понимает",
+   "src": 48.12,
+   "start": 34.548,
+   "end": 35.011,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "смысл",
+   "src": 48.62,
+   "start": 35.011,
+   "end": 35.511,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "самой",
+   "src": 49.16,
+   "start": 35.511,
+   "end": 35.807,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "песни,",
+   "src": 49.48,
+   "start": 35.807,
+   "end": 36.289,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "но",
+   "src": 50.22,
+   "start": 36.493,
+   "end": 36.752,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ему",
+   "src": 50.5,
+   "start": 36.752,
+   "end": 37.011,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "интересен",
+   "src": 50.78,
+   "start": 37.011,
+   "end": 37.659,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ритм",
+   "src": 51.48,
+   "start": 37.659,
+   "end": 38.104,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "и",
+   "src": 51.96,
+   "start": 38.104,
+   "end": 38.363,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "повторяющиеся",
+   "src": 52.24,
+   "start": 38.363,
+   "end": 39.196,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "фразы,",
+   "src": 53.14,
+   "start": 39.196,
+   "end": 39.567,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "А",
+   "src": 54.04,
+   "start": 39.567,
+   "end": 39.789,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "это",
+   "src": 54.3,
+   "start": 39.789,
+   "end": 39.993,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "очень",
+   "src": 54.52,
+   "start": 39.993,
+   "end": 40.382,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "важная",
+   "src": 54.94,
+   "start": 40.382,
+   "end": 40.863,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "чувствительность",
+   "src": 55.46,
+   "start": 40.863,
+   "end": 41.641,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "к",
+   "src": 56.3,
+   "start": 41.641,
+   "end": 41.77,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "звуковой",
+   "src": 56.44,
+   "start": 41.77,
+   "end": 42.196,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "стороне",
+   "src": 56.9,
+   "start": 42.196,
+   "end": 42.826,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "речи.",
+   "src": 57.58,
+   "start": 42.826,
+   "end": 43.167,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "И",
+   "src": 59.26,
+   "start": 43.361,
+   "end": 43.509,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "пятая.",
+   "src": 59.42,
+   "start": 43.509,
+   "end": 43.935,
+   "accent": false,
+   "hidden": true
+  },
+  {
+   "text": "Ваш",
+   "src": 60.08,
+   "start": 44.12,
+   "end": 44.287,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "ребенок",
+   "src": 60.26,
+   "start": 44.287,
+   "end": 44.732,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "интересуется",
+   "src": 60.74,
+   "start": 44.732,
+   "end": 45.583,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "древними",
+   "src": 61.66,
+   "start": 45.583,
+   "end": 46.176,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "культурами,",
+   "src": 62.3,
+   "start": 46.176,
+   "end": 46.867,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "древними",
+   "src": 63.62,
+   "start": 47.107,
+   "end": 47.496,
+   "accent": true,
+   "hidden": false
+  },
+  {
+   "text": "цивилизациями,",
+   "src": 64.04,
+   "start": 47.496,
+   "end": 48.467,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "историей",
+   "src": 65.7,
+   "start": 48.856,
+   "end": 49.189,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "или",
+   "src": 66.06,
+   "start": 49.189,
+   "end": 49.25,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "географией.",
+   "src": 66.56,
+   "start": 49.45,
+   "end": 49.894,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "Больше",
+   "src": 68.74,
+   "start": 50.126,
+   "end": 50.385,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "интересного",
+   "src": 69.02,
+   "start": 50.385,
+   "end": 50.978,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "про",
+   "src": 69.66,
+   "start": 50.978,
+   "end": 51.2,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "детей",
+   "src": 69.9,
+   "start": 51.2,
+   "end": 51.626,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "и",
+   "src": 70.36,
+   "start": 51.626,
+   "end": 51.959,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "про",
+   "src": 70.72,
+   "start": 51.959,
+   "end": 52.089,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "иностранные",
+   "src": 70.86,
+   "start": 52.089,
+   "end": 52.589,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "языки",
+   "src": 71.4,
+   "start": 52.589,
+   "end": 52.933,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "у",
+   "src": 72.12,
+   "start": 52.933,
+   "end": 53.1,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "меня",
+   "src": 72.3,
+   "start": 53.1,
+   "end": 53.267,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "на",
+   "src": 72.48,
+   "start": 53.267,
+   "end": 53.452,
+   "accent": false,
+   "hidden": false
+  },
+  {
+   "text": "страничке.",
+   "src": 72.68,
+   "start": 53.452,
+   "end": 53.896,
+   "accent": false,
+   "hidden": false
+  }
+ ],
+ "chunks": [
+  {
+   "a": 0.0,
+   "b": 1.556,
+   "w": [
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "a": 1.593,
+   "b": 2.426,
+   "w": [
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "a": 2.426,
+   "b": 3.778,
+   "w": [
+    7,
+    8
+   ]
+  },
+  {
+   "a": 3.778,
+   "b": 5.067,
+   "w": [
+    9,
+    10,
+    11
+   ]
+  },
+  {
+   "a": 5.644,
+   "b": 6.515,
+   "w": [
+    13,
+    14,
+    15
+   ]
+  },
+  {
+   "a": 6.515,
+   "b": 8.533,
+   "w": [
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "a": 8.681,
+   "b": 9.793,
+   "w": [
+    21,
+    22,
+    23,
+    24
+   ]
+  },
+  {
+   "a": 9.793,
+   "b": 11.333,
+   "w": [
+    25,
+    26
+   ]
+  },
+  {
+   "a": 12.128,
+   "b": 13.091,
+   "w": [
+    28,
+    29,
+    30
+   ]
+  },
+  {
+   "a": 13.091,
+   "b": 13.961,
+   "w": [
+    31,
+    32
+   ]
+  },
+  {
+   "a": 13.961,
+   "b": 15.22,
+   "w": [
+    33,
+    34,
+    35
+   ]
+  },
+  {
+   "a": 15.369,
+   "b": 16.294,
+   "w": [
+    36,
+    37,
+    38
+   ]
+  },
+  {
+   "a": 16.383,
+   "b": 17.433,
+   "w": [
+    39,
+    40,
+    41,
+    42
+   ]
+  },
+  {
+   "a": 17.461,
+   "b": 19.017,
+   "w": [
+    43,
+    44,
+    45
+   ]
+  },
+  {
+   "a": 19.017,
+   "b": 20.5,
+   "w": [
+    46,
+    47,
+    48
+   ]
+  },
+  {
+   "a": 21.111,
+   "b": 22.185,
+   "w": [
+    50,
+    51,
+    52
+   ]
+  },
+  {
+   "a": 22.185,
+   "b": 24.067,
+   "w": [
+    53,
+    54,
+    55
+   ]
+  },
+  {
+   "a": 24.085,
+   "b": 25.03,
+   "w": [
+    56,
+    57,
+    58
+   ]
+  },
+  {
+   "a": 25.215,
+   "b": 26.511,
+   "w": [
+    59,
+    60,
+    61,
+    62
+   ]
+  },
+  {
+   "a": 26.511,
+   "b": 27.333,
+   "w": [
+    63
+   ]
+  },
+  {
+   "a": 27.398,
+   "b": 28.194,
+   "w": [
+    64,
+    65
+   ]
+  },
+  {
+   "a": 28.194,
+   "b": 30.1,
+   "w": [
+    66,
+    67,
+    68
+   ]
+  },
+  {
+   "a": 30.883,
+   "b": 32.18,
+   "w": [
+    70,
+    71,
+    72,
+    73
+   ]
+  },
+  {
+   "a": 32.18,
+   "b": 33.733,
+   "w": [
+    74,
+    75,
+    76,
+    77
+   ]
+  },
+  {
+   "a": 33.789,
+   "b": 35.011,
+   "w": [
+    78,
+    79,
+    80,
+    81
+   ]
+  },
+  {
+   "a": 35.011,
+   "b": 36.289,
+   "w": [
+    82,
+    83,
+    84
+   ]
+  },
+  {
+   "a": 36.493,
+   "b": 38.104,
+   "w": [
+    85,
+    86,
+    87,
+    88
+   ]
+  },
+  {
+   "a": 38.104,
+   "b": 39.567,
+   "w": [
+    89,
+    90,
+    91
+   ]
+  },
+  {
+   "a": 39.567,
+   "b": 40.863,
+   "w": [
+    92,
+    93,
+    94,
+    95
+   ]
+  },
+  {
+   "a": 40.863,
+   "b": 42.196,
+   "w": [
+    96,
+    97,
+    98
+   ]
+  },
+  {
+   "a": 42.196,
+   "b": 43.167,
+   "w": [
+    99,
+    100
+   ]
+  },
+  {
+   "a": 43.361,
+   "b": 43.509,
+   "w": [
+    101
+   ]
+  },
+  {
+   "a": 44.12,
+   "b": 45.583,
+   "w": [
+    103,
+    104,
+    105
+   ]
+  },
+  {
+   "a": 45.583,
+   "b": 46.867,
+   "w": [
+    106,
+    107
+   ]
+  },
+  {
+   "a": 47.107,
+   "b": 48.467,
+   "w": [
+    108,
+    109
+   ]
+  },
+  {
+   "a": 48.856,
+   "b": 49.894,
+   "w": [
+    110,
+    111,
+    112
+   ]
+  },
+  {
+   "a": 50.126,
+   "b": 51.2,
+   "w": [
+    113,
+    114,
+    115
+   ]
+  },
+  {
+   "a": 51.2,
+   "b": 52.589,
+   "w": [
+    116,
+    117,
+    118,
+    119
+   ]
+  },
+  {
+   "a": 52.589,
+   "b": 53.896,
+   "w": [
+    120,
+    121,
+    122,
+    123,
+    124
+   ]
+  }
+ ],
+ "hook": {
+  "lines": [
+   "5 НЕОЧЕВИДНЫХ",
+   "ПРИЗНАКОВ"
+  ],
+  "plate": "РАСТЁТ ПЕРЕВОДЧИК?",
+  "from": "out:0",
+  "to": "wordend:переводчик#1",
+  "ta": 0.0,
+  "tb": 5.067
+ },
+ "scenes": [],
+ "overlays": [
+  {
+   "id": "o1",
+   "archetype": "panel_status",
+   "ta": 6.315,
+   "tb": 11.333,
+   "header": null,
+   "props": {
+    "label": "признак 1",
+    "title": "смешные слова",
+    "sub": "метаязыковая способность",
+    "icon": "bubble",
+    "icon_at": 7.07
+   }
+  },
+  {
+   "id": "o2",
+   "archetype": "panel_rows",
+   "ta": 13.091,
+   "tb": 20.5,
+   "header": null,
+   "props": {
+    "label": "меняет интонацию",
+    "rows": [
+     {
+      "text": "с мамой",
+      "at": 14.776
+     },
+     {
+      "text": "с бабушкой",
+      "at": 15.683
+     },
+     {
+      "text": "с друзьями",
+      "at": 16.92
+     }
+    ]
+   }
+  },
+  {
+   "id": "o3",
+   "archetype": "chips",
+   "ta": 23.093,
+   "tb": 27.333,
+   "header": null,
+   "props": {
+    "items": [
+     {
+      "text": "герой мультфильма",
+      "at": 25.678,
+      "row": 0,
+      "mark": "check"
+     },
+     {
+      "text": "иностранец",
+      "at": 26.511,
+      "row": 1,
+      "mark": "check"
+     }
+    ]
+   }
+  },
+  {
+   "id": "o4",
+   "archetype": "panel_flow",
+   "ta": 36.811,
+   "tb": 43.167,
+   "header": null,
+   "props": {
+    "label": "песни на иностранном",
+    "nodes": [
+     {
+      "text": "ритм",
+      "at": 37.659
+     },
+     {
+      "text": "повторы",
+      "at": 38.363
+     },
+     {
+      "text": "звук речи",
+      "at": 41.77
+     }
+    ]
+   }
+  },
+  {
+   "id": "o5",
+   "archetype": "panel_status",
+   "ta": 45.583,
+   "tb": 49.894,
+   "header": null,
+   "props": {
+    "label": "признак 5",
+    "title": "древние культуры",
+    "sub": "цивилизации · история · география",
+    "icon": "globe",
+    "icon_at": 46.176
+   }
+  }
+ ],
+ "blocks": [
+  {
+   "kind": "head",
+   "b": 0.0
+  }
+ ],
+ "shots": [
+  {
+   "t": 0.0,
+   "preset": "B"
+  },
+  {
+   "t": 2.406,
+   "preset": "D"
+  },
+  {
+   "t": 5.624,
+   "preset": "A"
+  },
+  {
+   "t": 8.661,
+   "preset": "C"
+  },
+  {
+   "t": 12.108,
+   "preset": "B"
+  },
+  {
+   "t": 15.349,
+   "preset": "D"
+  },
+  {
+   "t": 18.997,
+   "preset": "A"
+  },
+  {
+   "t": 22.165,
+   "preset": "C"
+  },
+  {
+   "t": 25.195,
+   "preset": "B"
+  },
+  {
+   "t": 28.174,
+   "preset": "D"
+  },
+  {
+   "t": 30.863,
+   "preset": "A"
+  },
+  {
+   "t": 33.769,
+   "preset": "C"
+  },
+  {
+   "t": 36.473,
+   "preset": "B"
+  },
+  {
+   "t": 39.547,
+   "preset": "D"
+  },
+  {
+   "t": 42.176,
+   "preset": "A"
+  },
+  {
+   "t": 45.563,
+   "preset": "C"
+  },
+  {
+   "t": 48.836,
+   "preset": "B"
+  },
+  {
+   "t": 51.18,
+   "preset": "D"
+  }
+ ],
+ "chapters": [
+  {
+   "n": "01",
+   "label": "слова",
+   "t": 5.233
+  },
+  {
+   "n": "02",
+   "label": "голоса",
+   "t": 11.361
+  },
+  {
+   "n": "03",
+   "label": "образы",
+   "t": 20.62
+  },
+  {
+   "n": "04",
+   "label": "песни",
+   "t": 30.276
+  },
+  {
+   "n": "05",
+   "label": "история",
+   "t": 43.509
+  }
+ ],
+ "chapters_end": 49.894,
+ "mattes": [
+  {
+   "n": "01",
+   "from": 5.17,
+   "dur": 1.8,
+   "file": "matte_01.webm"
+  },
+  {
+   "n": "02",
+   "from": 11.3,
+   "dur": 1.8,
+   "file": "matte_02.webm"
+  },
+  {
+   "n": "03",
+   "from": 20.56,
+   "dur": 1.8,
+   "file": "matte_03.webm"
+  },
+  {
+   "n": "04",
+   "from": 30.22,
+   "dur": 1.8,
+   "file": "matte_04.webm"
+  },
+  {
+   "n": "05",
+   "from": 43.45,
+   "dur": 1.8,
+   "file": "matte_05.webm"
+  }
+ ],
+ "builds": [],
+ "moves": [
+  {
+   "t": 0.1,
+   "what": "hook headline",
+   "prio": 2
+  },
+  {
+   "t": 5.333,
+   "what": "numeral 01",
+   "prio": 3
+  },
+  {
+   "t": 11.461,
+   "what": "numeral 02",
+   "prio": 3
+  },
+  {
+   "t": 20.72,
+   "what": "numeral 03",
+   "prio": 3
+  },
+  {
+   "t": 30.376,
+   "what": "numeral 04",
+   "prio": 3
+  },
+  {
+   "t": 43.609,
+   "what": "numeral 05",
+   "prio": 3
+  },
+  {
+   "t": 6.465,
+   "what": "panel o1",
+   "prio": 1
+  },
+  {
+   "t": 13.241,
+   "what": "panel o2",
+   "prio": 1
+  },
+  {
+   "t": 36.961,
+   "what": "panel o4",
+   "prio": 1
+  },
+  {
+   "t": 45.733,
+   "what": "panel o5",
+   "prio": 1
+  }
+ ],
+ "events": [
+  {
+   "t": 14.776,
+   "k": "pop",
+   "scene": "o2"
+  },
+  {
+   "t": 15.683,
+   "k": "pop",
+   "scene": "o2"
+  },
+  {
+   "t": 16.92,
+   "k": "pop",
+   "scene": "o2"
+  },
+  {
+   "t": 25.678,
+   "k": "pop",
+   "scene": "o3"
+  },
+  {
+   "t": 26.511,
+   "k": "pop",
+   "scene": "o3"
+  },
+  {
+   "t": 37.659,
+   "k": "pop",
+   "scene": "o4"
+  },
+  {
+   "t": 38.363,
+   "k": "pop",
+   "scene": "o4"
+  },
+  {
+   "t": 41.77,
+   "k": "pop",
+   "scene": "o4"
+  }
+ ],
+ "warnings": []
+}

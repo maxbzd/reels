@@ -1,0 +1,8 @@
+# reels-studio intermediates (rebuilt by the pipeline)
+reels/*/final.mp4
+reels/*/*.wav
+reels/*/stills/
+reels/*/matte/
+reels/*/sfx/
+reels/*/out/reel.mp4
+reels/*/out/sheet.jpg

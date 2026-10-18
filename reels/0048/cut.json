@@ -1,0 +1,112 @@
+{
+ "source": "/root/.claude/uploads/49ee6eb3-b127-5bc3-90bd-d29f123153e9/d92c3813-IMG_0048-compressed_1.mp4",
+ "speed": 1.08,
+ "density": "tight",
+ "ranges": [
+  {
+   "start": 0.88,
+   "end": 5.4
+  },
+  {
+   "start": 5.6,
+   "end": 6.53
+  },
+  {
+   "start": 7.86,
+   "end": 8.35
+  },
+  {
+   "start": 8.6,
+   "end": 11.83
+  },
+  {
+   "start": 12.32,
+   "end": 15.33
+  },
+  {
+   "start": 16.89,
+   "end": 17.35
+  },
+  {
+   "start": 17.57,
+   "end": 22.48
+  },
+  {
+   "start": 22.93,
+   "end": 24.14
+  },
+  {
+   "start": 24.59,
+   "end": 27.9
+  },
+  {
+   "start": 29.17,
+   "end": 29.72
+  },
+  {
+   "start": 30.22,
+   "end": 33.55
+  },
+  {
+   "start": 33.72,
+   "end": 37.24
+  },
+  {
+   "start": 38.15,
+   "end": 41.13
+  },
+  {
+   "start": 42.23,
+   "end": 42.98
+  },
+  {
+   "start": 43.35,
+   "end": 46.51
+  },
+  {
+   "start": 47.24,
+   "end": 53.54
+  },
+  {
+   "start": 54.06,
+   "end": 57.94
+  },
+  {
+   "start": 59.05,
+   "end": 63.04
+  },
+  {
+   "start": 63.36,
+   "end": 65.09
+  },
+  {
+   "start": 65.28,
+   "end": 66.07
+  },
+  {
+   "start": 66.29,
+   "end": 67.2
+  },
+  {
+   "start": 68.64,
+   "end": 71.77
+  },
+  {
+   "start": 72.12,
+   "end": 73.3
+  }
+ ],
+ "fix": {
+  "метаизыковой": "метаязыковой"
+ },
+ "drop_words": [
+  "—",
+  "-"
+ ],
+ "notes": "ranges come from the audio. Edit 'fix' to correct recognized terms. Remove or extend ranges to cut takes or keep a pause.",
+ "stats": {
+  "threshold_db": -50.0,
+  "noise_db": -58.0,
+  "p95_db": -25.0
+ }
+}

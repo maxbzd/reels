@@ -1,0 +1,98 @@
+{
+ "voice_peak_db": -8.9,
+ "voice_lufs": -27.8,
+ "sfx": [
+  {
+   "t": 0.1,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "hook headline",
+   "peak_db": -19.9
+  },
+  {
+   "t": 5.333,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "numeral 01",
+   "peak_db": -19.9
+  },
+  {
+   "t": 11.461,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "numeral 02",
+   "peak_db": -19.9
+  },
+  {
+   "t": 13.241,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "panel o2",
+   "peak_db": -19.9
+  },
+  {
+   "t": 14.776,
+   "kind": "pop",
+   "file": "pop",
+   "what": "pop in o2",
+   "peak_db": -19.4
+  },
+  {
+   "t": 20.72,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "numeral 03",
+   "peak_db": -19.9
+  },
+  {
+   "t": 25.678,
+   "kind": "pop",
+   "file": "pop",
+   "what": "pop in o3",
+   "peak_db": -19.4
+  },
+  {
+   "t": 30.376,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "numeral 04",
+   "peak_db": -19.9
+  },
+  {
+   "t": 36.961,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "panel o4",
+   "peak_db": -19.9
+  },
+  {
+   "t": 38.363,
+   "kind": "pop",
+   "file": "pop",
+   "what": "pop in o4",
+   "peak_db": -19.4
+  },
+  {
+   "t": 43.609,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "numeral 05",
+   "peak_db": -19.9
+  },
+  {
+   "t": 45.733,
+   "kind": "whoosh",
+   "file": "whoosh",
+   "what": "panel o5",
+   "peak_db": -19.9
+  }
+ ],
+ "music": null,
+ "result": {
+  "lufs": -14.4,
+  "true_peak": -2.1,
+  "video_s": 54.033,
+  "audio_s": 54.08,
+  "ok": true
+ }
+}
