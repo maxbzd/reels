@@ -342,6 +342,38 @@ def camera(frame, t):
     return np.asarray(im, np.float32)
 
 
+def side_labels(frame, t):
+    """name + bracket on the right of each block, years on the left (like the reference reel)"""
+    names = {"gone": ["Gone"], "sleep": ["Sleep"], "workchores": ["Work &", "chores"],
+             "screens": ["Screens"], "living": ["Left to", "live"]}
+    xr = GX0 + COLS * P
+    for s in T.STEPS:
+        if t < s["t0"] or t >= T.DROP:
+            continue
+        p = ease_io((t - s["t0"] - T.FILL_DELAY) / T.FILL_DUR)
+        a = fade(t, s["t0"], 0.10)
+        r0 = s["start"] / COLS
+        r1 = (s["start"] + s["n"]) / COLS
+        y0 = GY0 + r0 * P
+        y1 = GY0 + (r0 + (r1 - r0) * max(p, 0.02)) * P
+        # bracket on the right
+        xb = xr + 12
+        x0i, x1i = xb, xb + 3
+        ya, yb = int(y0 + 2), int(max(y0 + 6, y1 - 2))
+        col = np.array(s["color"], np.float32)
+        reg = frame[ya:yb, x0i:x1i]
+        frame[ya:yb, x0i:x1i] = reg * (1 - 0.9 * a) + col * 0.9 * a
+        # right label: name, centred on the (growing) block
+        yc = (y0 + y1) / 2
+        lines = names[s["key"]]
+        for i, line in enumerate(lines):
+            dy = (i - (len(lines) - 1) / 2) * 35
+            blit_text(frame, text_layer(line, INTER_SB, 31, s["color"]), xb + 14 + 56, yc + dy, a)
+        # left label: years (counts up with the fill)
+        yrs = int(round(p * s["years"]))
+        blit_text(frame, text_layer(f"{yrs} yrs", INTER_SB, 33, s["color"]), GX0 - 14 - 52, yc, a)
+
+
 def render_intro(f):
     t = f / FPS
     frame = np.zeros((H, W, 3), np.float32)
@@ -358,6 +390,8 @@ def render_intro(f):
     # --- grid
     if t >= T.GRID_IN:
         frame[GY0:GY0 + ROWS * P, GX0:GX0 + COLS * P] = grid_image(t, 1.0)
+
+    side_labels(frame, t)
 
     # --- caption block over the grid
     step = None
