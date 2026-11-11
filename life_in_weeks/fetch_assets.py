@@ -18,14 +18,8 @@ CLIPS = {
     31: ("https://assets.mixkit.co/videos/51791/51791-1080.mp4", "Forest and mountains, aerial (vertical)"),
     149: ("https://assets.mixkit.co/videos/23582/23582-720.mp4", "Friends running in the countryside"),
     16: ("https://assets.mixkit.co/videos/50267/50267-1080.mp4", "Landscape with a road at sunset"),
-    63: ("https://assets.mixkit.co/videos/50561/50561-1080.mp4", "Explorer walks to the waterfall"),
-    126: ("https://assets.mixkit.co/videos/1114/1114-1080.mp4", "Woman walking into the ocean"),
     74: ("https://assets.mixkit.co/videos/4840/4840-1080.mp4", "Woman during a sunset on a rooftop"),
     150: ("https://assets.mixkit.co/videos/37008/37008-720.mp4", "Friends enjoying sunset on the seashore"),
-    165: ("https://assets.mixkit.co/videos/36985/36985-720.mp4", "Cheerful man raising arms surrounded by mountains"),
-    53: ("https://assets.mixkit.co/videos/1214/1214-1080.mp4", "Woman's silhouette walking on the beach at sunset (vertical)"),
-    164: ("https://assets.mixkit.co/videos/36979/36979-720.mp4", "Mountaineer walking on a cliff in a winter mountain range"),
-    143: ("https://assets.mixkit.co/videos/39767/39767-1080.mp4", "Family walking together in nature (vertical)"),
 }
 MUSIC = {}   # music is supplied by the author: assets/music/luminary.mp3 (Joel Sunny - Luminary)
 FONTS = {

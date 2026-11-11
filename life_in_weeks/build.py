@@ -202,7 +202,7 @@ def blit_arr(frame, arr, x, y, opacity=1.0, anchor="l"):
     frame[sl] = frame[sl] * (1 - al) + rgb[sub] * al
 
 
-STATUS_Y = 150
+STATUS_Y = 297
 
 
 def status_bar(frame, t, pct, charging):
@@ -223,24 +223,34 @@ def status_bar(frame, t, pct, charging):
 
 
 # --------------------------------------------------------------------- grid
-COLS, ROWS, P = 52, 80, 14
-GX0 = (W - COLS * P) // 2
-GY0 = 500
+# Instagram safe zones (1080x1920): keep everything between y=270 and y=1250, x>=65,
+# and keep anything important left of ~900 px (right-hand buttons).
+COLS, ROWS = 52, 80
+PX, PY = 11, 9                 # cell size; dots are slightly flattened ovals
+GX0 = 158
+GY0 = 492                      # grid spans y 492 .. 1212
 UNLIT = np.array([34, 35, 46], np.float32)
+TOP_LABEL_Y, TOP_NUM_Y, FOOT_Y = 352, 438, 1238
 
 
 def _make_sprite():
-    r = 4.4
-    c = (P - 1) / 2.0
-    yy, xx = np.mgrid[0:P, 0:P].astype(np.float32)
-    dist = np.sqrt((xx - c) ** 2 + (yy - c) ** 2)
-    return np.clip(r + 0.5 - dist, 0, 1).astype(np.float32)
+    rx, ry = 4.1, 3.3
+    cx, cy = (PX - 1) / 2.0, (PY - 1) / 2.0
+    yy, xx = np.mgrid[0:PY, 0:PX].astype(np.float32)
+    d = np.sqrt(((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2)
+    return np.clip((1 - d) * min(rx, ry) + 0.5, 0, 1).astype(np.float32)
 
 
 SPRITE = _make_sprite()
+COVER = float(SPRITE.sum()) / (PX * PY)         # share of a cell that a dot covers
 _ROW = (np.arange(T.TOTAL_WEEKS) // COLS).astype(np.float32)
 _COL = (np.arange(T.TOTAL_WEEKS) % COLS).astype(np.float32)
 _IDX = np.arange(T.TOTAL_WEEKS)
+
+
+def light(c, k=0.35):
+    """blend a colour towards white (small text must read on black)"""
+    return tuple(int(v + (255 - v) * k) for v in c)
 
 
 def lit_counts(t):
@@ -281,14 +291,13 @@ def grid_image(t, dim):
     # tile the dots
     base = base.reshape(ROWS, COLS, 3)
     tiles = base[:, :, None, None, :] * SPRITE[None, None, :, :, None]
-    img = tiles.transpose(0, 2, 1, 3, 4).reshape(ROWS * P, COLS * P, 3)
+    img = tiles.transpose(0, 2, 1, 3, 4).reshape(ROWS * PY, COLS * PX, 3)
 
     # glow (computed from the lit dots only, at low resolution)
-    # dots cover only ~31% of their cell, so scale the source down to the real mean brightness
-    g = (glow_src * 0.31).reshape(ROWS, COLS, 3).astype(np.uint8)
+    g = (glow_src * COVER).reshape(ROWS, COLS, 3).astype(np.uint8)
     gi = Image.fromarray(g).resize((COLS * 2, ROWS * 2), Image.NEAREST)
-    g1 = gi.filter(ImageFilter.GaussianBlur(2.0)).resize((COLS * P, ROWS * P), Image.BICUBIC)
-    g2 = gi.filter(ImageFilter.GaussianBlur(6.5)).resize((COLS * P, ROWS * P), Image.BICUBIC)
+    g1 = gi.filter(ImageFilter.GaussianBlur(2.0)).resize((COLS * PX, ROWS * PY), Image.BICUBIC)
+    g2 = gi.filter(ImageFilter.GaussianBlur(6.5)).resize((COLS * PX, ROWS * PY), Image.BICUBIC)
     img = img + np.asarray(g1, np.float32) * 0.9 + np.asarray(g2, np.float32) * 1.6
     return np.clip(img * dim, 0, 255)
 
@@ -342,11 +351,14 @@ def camera(frame, t):
     return np.asarray(im, np.float32)
 
 
+LEGEND_MAX_X = 900            # nothing right of this: Instagram's like/comment/share column
+
+
 def side_labels(frame, t):
-    """name + bracket on the right of each block, years on the left (like the reference reel)"""
+    """name + bracket right of each block (kept left of 900 px), years on the left"""
     names = {"gone": ["Gone"], "sleep": ["Sleep"], "workchores": ["Work &", "chores"],
              "screens": ["Screens"], "living": ["Left to", "live"]}
-    xr = GX0 + COLS * P
+    xr = GX0 + COLS * PX
     for s in T.STEPS:
         if t < s["t0"] or t >= T.DROP:
             continue
@@ -354,66 +366,68 @@ def side_labels(frame, t):
         a = fade(t, s["t0"], 0.10)
         r0 = s["start"] / COLS
         r1 = (s["start"] + s["n"]) / COLS
-        y0 = GY0 + r0 * P
-        y1 = GY0 + (r0 + (r1 - r0) * max(p, 0.02)) * P
-        # bracket on the right
+        y0 = GY0 + r0 * PY
+        y1 = GY0 + (r0 + (r1 - r0) * max(p, 0.02)) * PY
         xb = xr + 12
-        x0i, x1i = xb, xb + 3
         ya, yb = int(y0 + 2), int(max(y0 + 6, y1 - 2))
         col = np.array(s["color"], np.float32)
-        reg = frame[ya:yb, x0i:x1i]
-        frame[ya:yb, x0i:x1i] = reg * (1 - 0.9 * a) + col * 0.9 * a
-        # right label: name, centred on the (growing) block
+        reg = frame[ya:yb, xb:xb + 3]
+        frame[ya:yb, xb:xb + 3] = reg * (1 - 0.9 * a) + col * 0.9 * a
         yc = (y0 + y1) / 2
         lines = names[s["key"]]
         for i, line in enumerate(lines):
-            dy = (i - (len(lines) - 1) / 2) * 35
-            blit_text(frame, text_layer(line, INTER_SB, 31, s["color"]), xb + 14 + 56, yc + dy, a)
-        # left label: years (counts up with the fill)
+            lay = text_layer(line, INTER_SB, 34, light(s["color"], 0.25))
+            w = lay[1].shape[1] - 12
+            assert xb + 18 + w <= LEGEND_MAX_X, (line, xb + 18 + w)
+            dy = (i - (len(lines) - 1) / 2) * 40
+            blit_text(frame, lay, xb + 18 + w / 2, yc + dy, a)
         yrs = int(round(p * s["years"]))
-        blit_text(frame, text_layer(f"{yrs} yrs", INTER_SB, 33, s["color"]), GX0 - 14 - 52, yc, a)
+        lay = text_layer(f"{yrs}y", INTER_SB, 38, light(s["color"], 0.25))
+        w = lay[1].shape[1] - 12
+        blit_text(frame, lay, GX0 - 14 - w / 2, yc, a)
 
 
 def render_intro(f):
     t = f / FPS
     frame = np.zeros((H, W, 3), np.float32)
 
-    # --- hook: title is on screen from the first frames
+    # --- hook: on screen from the first frames
     if t < T.TITLE_OUT + 0.3:
         a1 = fade(t, 0.0, 0.09, T.TITLE_OUT - 0.08, 0.18)
-        blit_text(frame, text_layer("If you're 20,", SERIF, 200, (255, 255, 255)), W / 2, 830, a1,
+        blit_text(frame, text_layer("If you're 20,", SERIF, 200, (255, 255, 255)), W / 2, 800, a1,
                   dy=(1 - ease_out(t / 0.28)) * 46)
-        a2 = fade(t, 0.30, 0.2, T.TITLE_OUT - 0.08, 0.18)
-        blit_text(frame, text_layer("this is your whole life.", INTER_L, 50, (200, 204, 214)),
-                  W / 2, 1000, a2)
+        a2 = fade(t, 0.25, 0.2, T.TITLE_OUT - 0.08, 0.18)
+        blit_text(frame, text_layer("this is your whole life.", INTER_L, 52, (215, 218, 228)),
+                  W / 2, 970, a2)
 
     # --- grid
     if t >= T.GRID_IN:
-        frame[GY0:GY0 + ROWS * P, GX0:GX0 + COLS * P] = grid_image(t, 1.0)
+        frame[GY0:GY0 + ROWS * PY, GX0:GX0 + COLS * PX] = grid_image(t, 1.0)
 
     side_labels(frame, t)
 
-    # --- caption block over the grid
+    # --- caption block above the grid
     step = None
     for s in T.STEPS:
         if t >= s["t0"]:
             step = s
     if T.COUNT_IN <= t < T.DROP:
         if step is None:  # "80 years / 4,160 weeks"
-            p = ease_out((t - T.COUNT_IN) / 0.6)
+            p = ease_out((t - T.COUNT_IN) / 0.9)
             a = fade(t, T.COUNT_IN, 0.1)
-            blit_text(frame, text_layer("80 YEARS", INTER_SB, 30, (150, 156, 170), tracking=8), W / 2, 240, a)
-            blit_text(frame, text_layer(f"{int(round(p * T.TOTAL_WEEKS)):,} weeks", SERIF, 150, (255, 255, 255)),
-                      W / 2, 345, a)
+            blit_text(frame, text_layer("80 YEARS", INTER_SB, 36, (205, 209, 220), tracking=7), W / 2, TOP_LABEL_Y, a)
+            blit_text(frame, text_layer(f"{int(round(p * T.TOTAL_WEEKS)):,} weeks", SERIF, 112, (255, 255, 255)),
+                      W / 2, TOP_NUM_Y, a)
         else:
             p = ease_io((t - step["t0"] - T.FILL_DELAY) / T.FILL_DUR)
             a = fade(t, step["t0"], 0.07)
             yrs = int(round(p * step["years"]))
-            blit_text(frame, text_layer(step["label"], INTER_SB, 30, step["color"], tracking=8), W / 2, 240, a)
+            blit_text(frame, text_layer(step["label"], INTER_SB, 36, light(step["color"], 0.3), tracking=7),
+                      W / 2, TOP_LABEL_Y, a)
             unit = "year" if yrs == 1 else "years"
-            blit_text(frame, text_layer(f"{yrs} {unit}", SERIF, 150, (255, 255, 255)), W / 2, 345, a)
-        blit_text(frame, text_layer("1 dot = 1 week  ·  ages 0 – 80  ·  rough estimate", INTER_L, 26,
-                                    (130, 134, 146)), W / 2, GY0 + ROWS * P + 52, fade(t, T.COUNT_IN + 0.2, 0.3))
+            blit_text(frame, text_layer(f"{yrs} {unit}", SERIF, 112, (255, 255, 255)), W / 2, TOP_NUM_Y, a)
+        blit_text(frame, text_layer("1 dot = 1 week  ·  ages 0 – 80  ·  rough estimate", INTER, 30,
+                                    (200, 204, 216)), W / 2, FOOT_Y, fade(t, T.COUNT_IN + 0.3, 0.3))
 
     # --- status bar: battery drains with the "life" being used up
     counts = lit_counts(t)
@@ -432,6 +446,24 @@ def render_intro(f):
     return np.clip(frame, 0, 255).astype(np.uint8)
 
 
+def render_cover(path):
+    """profile-grid cover: the filled grid with '11 years' in the centre square"""
+    frame = np.zeros((H, W, 3), np.float32)
+    gx = (W - COLS * PX) // 2
+    gy = 520
+    g = grid_image(T.DROP - 0.3, 0.55)
+    frame[gy:gy + ROWS * PY, gx:gx + COLS * PX] = g
+    # darken behind the text
+    yy = np.arange(H, dtype=np.float32)
+    band = (0.62 * np.exp(-((yy - 860) / 230) ** 2))[:, None, None]
+    frame *= (1 - band)
+    green = (120, 255, 175)
+    blit_text(frame, text_layer("LEFT TO ACTUALLY LIVE", INTER_SB, 44, green, tracking=9), W / 2, 700, 1.0)
+    blit_text(frame, text_layer("11 years", SERIF, 270, (255, 255, 255), shadow=True), W / 2, 860, 1.0)
+    blit_text(frame, text_layer("out of your 80", INTER, 48, (225, 228, 238)), W / 2, 1030, 1.0)
+    Image.fromarray(np.clip(frame, 0, 255).astype(np.uint8)).save(path)
+
+
 # ---------------------------------------------------------------- clip part
 _VIG_BOTTOM = None
 
@@ -440,9 +472,11 @@ def vignette():
     global _VIG_BOTTOM
     if _VIG_BOTTOM is None:
         y = np.linspace(0, 1, H, dtype=np.float32)
-        bottom = np.clip((y - 0.45) / 0.55, 0, 1) ** 1.5 * 0.66
+        bottom = np.clip((y - 0.55) / 0.45, 0, 1) ** 1.5 * 0.45
         top = np.clip(1 - y / 0.18, 0, 1) ** 1.5 * 0.40
-        _VIG_BOTTOM = (1 - np.maximum(bottom, top))[:, None, None].astype(np.float32)
+        base = 1 - np.maximum(bottom, top)
+        band = 0.30 * np.exp(-(((y * H) - 1100) / 230) ** 2)        # soft shade behind the captions
+        _VIG_BOTTOM = (base * (1 - band))[:, None, None].astype(np.float32)
     return _VIG_BOTTOM
 
 
@@ -497,16 +531,26 @@ def blit_text_scaled(frame, layer, cx, cy, opacity, scale, dy=0):
     blit_text(frame, (rgb, a2, sh2), cx, cy, opacity, dy)
 
 
+CAP_Y1, CAP_Y2 = 1130, (1040, 1168)       # caption rows (inside the 270..1250 safe band)
+CTA_Y = (880, 1010, 1140)
+
+
 def compose_clip(src, si, j, n, fg, vig, lines):
     t = fg / FPS
     prog = j / max(1, n - 1)
-    rapid = len(lines) == 0
+    last_shot = si == len(T.SHOTS) - 1
     # punch-in on the beat that relaxes into a slow push
     z = 1.0 + (0.20 if si == 0 else 0.13) * math.exp(-j / 3.2) + 0.07 * prog
     ww, hh = W / z, H / z
     x0, y0 = (W - ww) / 2, (H - hh) / 2
     im = Image.fromarray(src).resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + ww, y0 + hh))
-    frame = np.asarray(im, np.float32) * vig
+    frame = np.asarray(im, np.float32) * vig * T.SHOT_DIM.get(si, 1.0)
+
+    # call-to-action card: the last shot is dimmed and the caption hands over to the card
+    cj = int(round((T.CTA_AT - T.CUTS[-1]) * FPS))
+    ca = smooth((j - cj) / 7.0) if last_shot else 0.0
+    if ca > 0:
+        frame *= 1 - 0.58 * ca
 
     # chromatic split on the first frames of every cut
     if j < 4:
@@ -516,34 +560,34 @@ def compose_clip(src, si, j, n, fg, vig, lines):
             frame[..., 2] = np.roll(frame[..., 2], -sh, axis=1)
 
     # captions: pop in with overshoot
-    gold = si == len(T.SHOTS) - 1
-    col = (255, 255, 255) if gold else WARM
-    ys = [1330] if len(lines) == 1 else [1262, 1396]
+    col = (255, 255, 255) if last_shot else WARM
+    ys = [CAP_Y1] if len(lines) == 1 else list(CAP_Y2)
     for li, line in enumerate(lines):
         d0 = 1 + li * 3
-        a = smooth((j - d0) / 3.0)
+        a = smooth((j - d0) / 3.0) * (1 - ca)
         p = clamp01((j - d0) / 9.0)
         scale = 1.0 + 0.45 * (1 - ease_out(p)) ** 1.5
         path = SERIF_I if (li == len(lines) - 1 and len(lines) > 1) else SERIF
-        blit_text_scaled(frame, text_layer(line, path, 150, col, shadow=True), W / 2, ys[li], a, scale)
+        blit_text_scaled(frame, text_layer(line, path, 140, col, shadow=True), W / 2, ys[li], a, scale)
 
-    # closing call to action
-    if si == len(T.SHOTS) - 1:
-        cj = int(round((T.CTA_AT - T.CUTS[-1]) * FPS))
-        ca = smooth((j - cj) / 6.0)
-        if ca > 0:
-            blit_text_scaled(frame, text_layer("Start living.", SERIF_I, 104, (255, 214, 140), shadow=True),
-                             W / 2, 1560, ca, 1.0 + 0.25 * (1 - ease_out((j - cj) / 10.0)))
+    if ca > 0:
+        for li, line in enumerate(T.CTA_LINES):
+            d = clamp01((ca * 7 - li * 1.2) / 6.0)
+            path = SERIF_I if li == len(T.CTA_LINES) - 1 else SERIF
+            lay = text_layer(line, path, 112, (255, 236, 200) if li == len(T.CTA_LINES) - 1 else (255, 255, 255),
+                             shadow=True)
+            assert lay[1].shape[1] - 96 <= 780, (line, lay[1].shape[1])
+            blit_text(frame, lay, W / 2 - 40, CTA_Y[li], smooth(d), dy=(1 - ease_out(d)) * 30)
 
     # white flash on the beat
     if si == 0:
         fl = 0.95 * max(0.0, 1 - j / 9.0) ** 1.4
     else:
-        fl = (0.45 if rapid else 0.60) * max(0.0, 1 - j / 5.0) ** 1.5
+        fl = 0.60 * max(0.0, 1 - j / 5.0) ** 1.5
     if fl > 0:
         frame = frame + (255 - frame) * fl
 
-    # status bar: no signal, battery recharging
+    # status bar: no signal, battery recharging (stays on the CTA card: 100 %)
     p = smooth((t - T.DROP) / (T.FULL_TIME - T.DROP))
     pct = T.LOW_PCT + (100 - T.LOW_PCT) * p
     status_bar(frame, t, pct, charging=pct < 99.5)
@@ -552,14 +596,11 @@ def compose_clip(src, si, j, n, fg, vig, lines):
     frame += rng.standard_normal((H, W, 1), dtype=np.float32) * 1.8
 
     # fade to black at the very end
-    if si == len(T.SHOTS) - 1:
+    if last_shot:
         fade_start = n - T.FADE_FRAMES
         if j >= fade_start:
             frame *= 1 - (j - fade_start + 1) / T.FADE_FRAMES
     return np.clip(frame, 0, 255).astype(np.uint8)
-
-
-# ----------------------------------------------------------------------- main
 
 
 def mux(video, wav, out):
@@ -596,6 +637,11 @@ def main():
             f = int(round(float(tt) * FPS))
             Image.fromarray(render_intro(f)).save(os.path.join(d, f"intro_{float(tt):05.2f}.png"))
             print("saved", tt)
+        return
+
+    if "--cover" in sys.argv:
+        render_cover(os.path.join(OUT, "cover.png"))
+        print("cover saved")
         return
 
     video = os.path.join(OUT, "_video.mp4")

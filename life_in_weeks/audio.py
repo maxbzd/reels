@@ -161,8 +161,6 @@ def place(buf, sig, at, gain=1.0, pan=0.0):
 # -------------------------------------------------------------- sound design
 def build_sfx(total):
     buf = np.zeros((int(total * SR), 2))
-    tk = T.tk
-
     # --- 0. hook: heartbeat thumps under "You're 20."
     place(buf, thud(55, 0.5, 1.0), 0.00)
     place(buf, thud(48, 0.5, 0.75), 0.30)
@@ -202,10 +200,9 @@ def build_sfx(total):
         place(buf, static(0.28, 0.10 + 0.07 * k), ts)
 
     # --- 6. build to the drop (reverse crash + riser), then the HIT
-    rl = T.DROP - tk(13)
-    place(buf, riser(rl + 0.02, 0.7, 220, 3200), tk(13) - 0.02)
+    place(buf, riser(1.82, 0.7, 220, 3200), T.DROP - 1.8)
     rc = crash(1.4, 3000, 2.0, 0.7)[::-1]
-    place(buf, rc[-int((T.DROP - tk(12)) * SR):], tk(12))
+    place(buf, rc[-int(1.4 * SR):], T.DROP - 1.4)
     place(buf, boom(2.6, 100, 34, 1.0), T.DROP)
     place(buf, crash(1.8, 2500, 2.4, 0.75), T.DROP)
     place(buf, clap(0.7), T.DROP)
@@ -223,8 +220,7 @@ def build_sfx(total):
         else:
             place(buf, tick(2400, 0.03, 0.18), c + 0.08)       # caption "pop"
 
-    # --- 8. rapid-fire riser into "The phone can wait."
-    place(buf, riser(T.PHONE_SHOT_START - T.FLASH_START + 0.02, 0.6, 250, 4200), T.FLASH_START - 0.02)
+    # --- 8. accent on "The phone can wait."
     place(buf, boom(1.4, 90, 40, 0.7), T.PHONE_SHOT_START)
     place(buf, crash(1.0, 3000, 3.6, 0.45), T.PHONE_SHOT_START)
 
@@ -236,15 +232,24 @@ def build_sfx(total):
     # --- 10. battery full: ding
     place(buf, bell(1318.5, 1.8, 0.34), T.FULL_TIME)
     place(buf, bell(1975.5, 1.4, 0.2), T.FULL_TIME + 0.09)
+
+    # --- 11. call-to-action card: soft swell + low chime
+    place(buf, whoosh(0.45, True, 0.30, 300, 6000), T.CTA_AT - 0.12)
+    place(buf, bell(659.3, 1.8, 0.22), T.CTA_AT)
     return buf
 
 
 # --------------------------------------------------------------- voice-over
-def load_audio(path, tempo=1.0, stereo=False, max_dur=None):
+def load_audio(path, tempo=1.0, stereo=False, max_dur=None, ss=None, dur=None):
     af = []
     if tempo != 1.0:
         af.append(f"atempo={tempo}")
-    cmd = ["ffmpeg", "-v", "error", "-i", path]
+    cmd = ["ffmpeg", "-v", "error"]
+    if ss is not None:
+        cmd += ["-ss", f"{ss}"]
+    if dur is not None:
+        cmd += ["-t", f"{dur}"]
+    cmd += ["-i", path]
     if af:
         cmd += ["-af", ",".join(af)]
     cmd += ["-ac", "2" if stereo else "1", "-ar", str(SR), "-f", "f32le", "-"]
@@ -301,9 +306,24 @@ def smooth_env(sig, win_s):
 
 
 def build_music(total, vo):
-    m = load_audio(os.path.join(ASSETS, "music", "luminary.mp3"), 1.0, stereo=True)
+    """The track swells to a peak at 7.057 s; we stretch the lead-in so that peak lands on the
+    flash at DROP (9.8 s).  After the drop the track plays at its natural speed."""
+    path = os.path.join(ASSETS, "music", "luminary.mp3")
     n = int(total * SR)
-    m = m[:n] if len(m) >= n else np.vstack([m, np.zeros((n - len(m), 2))])
+    nd = int(round(T.DROP * SR))
+    xf = int(0.03 * SR)
+    lead = load_audio(path, T.LEAD_TEMPO, stereo=True, dur=T.MUSIC_DROP)
+    lead = lead[:nd] if len(lead) >= nd else np.vstack([lead, np.zeros((nd - len(lead), 2))])
+    rest = load_audio(path, 1.0, stereo=True, ss=T.MUSIC_DROP - 0.03)
+    m = np.zeros((n, 2))
+    m[:nd] = lead
+    # equal-power crossfade at the join
+    lead_tail = m[nd - xf:nd].copy()
+    fo = np.cos(np.linspace(0, np.pi / 2, xf))[:, None]
+    fi = np.sin(np.linspace(0, np.pi / 2, xf))[:, None]
+    m[nd - xf:nd] = lead_tail * fo + rest[:xf] * fi
+    tail = rest[xf:xf + (n - nd)]
+    m[nd:nd + len(tail)] = tail
     g = np.ones(n)
     # duck under the voice
     e = smooth_env(np.abs(vo[:n]), 0.12)
@@ -315,8 +335,8 @@ def build_music(total, vo):
     dip[a:b] = 0.04
     dip = smooth_env(dip, 0.012)
     g *= dip
-    # tail fade
-    f0 = int((total - 0.9) * SR)
+    # gentle fade-out over the last 1.8 s (no abrupt cut)
+    f0 = int((total - 1.8) * SR)
     g[f0:] *= np.cos(np.linspace(0, np.pi / 2, n - f0)) ** 2
     return m * g[:, None]
 
