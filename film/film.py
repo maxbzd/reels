@@ -190,7 +190,7 @@ def render_film_frame(fi):
 # ------------------------------------------------------------------ main
 def mux(video, wav, out):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy",
-                    "-af", "loudnorm=I=-14:TP=-2:LRA=9,alimiter=limit=0.89:level=disabled", "-c:a", "aac", "-b:a", "192k",
+                    "-af", "alimiter=limit=0.7:level=disabled,loudnorm=I=-15:TP=-2.5:LRA=9,alimiter=limit=0.84:level=disabled", "-c:a", "aac", "-b:a", "192k",
                     "-t", f"{TOTAL:.3f}", "-movflags", "+faststart", out], check=True)
 
 
