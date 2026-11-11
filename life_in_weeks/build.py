@@ -17,7 +17,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 import timeline as T
-import sfx
+import audio
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.join(HERE, "assets")
@@ -274,7 +274,7 @@ def grid_image(t, dim):
             lit[sl] = np.clip(col * pulse, 0, 255)
     lit = lit + flash[:, None] * (255 - lit) * 0.55 * mask[:, None]
 
-    appear = np.clip((t - T.GRID_IN - _ROW * 0.010 - _COL * 0.004) / 0.35, 0, 1)
+    appear = np.clip((t - T.GRID_IN - _ROW * 0.005 - _COL * 0.002) / 0.25, 0, 1)
     base = np.where(mask[:, None] > 0, lit, UNLIT[None, :]) * appear[:, None]
     glow_src = lit * mask[:, None] * appear[:, None]
 
@@ -303,66 +303,98 @@ def fade(t, t0, dur=0.3, t1=None, dur_out=0.2):
     return a
 
 
+_EDGE = None
+
+
+def edge_mask():
+    global _EDGE
+    if _EDGE is None:
+        yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+        d = np.sqrt(((xx - W / 2) / (W / 2)) ** 2 + ((yy - H / 2) / (H / 2)) ** 2)
+        _EDGE = np.clip((d - 0.35) / 0.85, 0, 1) ** 1.6
+    return _EDGE
+
+
+def camera(frame, t):
+    """punch-zooms on every block, shake during the SCREENS block, creeping zoom into the drop"""
+    z, dx, dy = 1.0, 0.0, 0.0
+    for s in T.STEPS:
+        dt = t - s["t0"]
+        if 0 <= dt < 0.4:
+            z += 0.05 * math.exp(-dt / 0.09)
+    sc = T.STEPS[3]
+    if sc["t0"] <= t < sc["t0"] + sc["dur"]:
+        a = 9 * (1 - (t - sc["t0"]) / sc["dur"])
+        dx, dy = a * math.sin(t * 95), a * math.cos(t * 83)
+        z += 0.03
+    lv = T.STEPS[4]
+    if t >= lv["t0"]:
+        z += 0.07 * smooth((t - lv["t0"]) / lv["dur"])
+    if t < 0.3:
+        z += 0.10 * (1 - t / 0.3) ** 2
+    if z == 1.0 and dx == 0 and dy == 0:
+        return frame
+    ww, hh = W / z, H / z
+    x0, y0 = (W - ww) / 2 - dx, (H - hh) / 2 - dy
+    x0, y0 = max(0.0, min(W - ww, x0)), max(0.0, min(H - hh, y0))
+    im = Image.fromarray(np.clip(frame, 0, 255).astype(np.uint8)).resize(
+        (W, H), Image.BILINEAR, box=(x0, y0, x0 + ww, y0 + hh))
+    return np.asarray(im, np.float32)
+
+
 def render_intro(f):
     t = f / FPS
     frame = np.zeros((H, W, 3), np.float32)
 
-    # --- opening title
-    if t < T.GRID_IN + 0.4:
-        out_t = T.GRID_IN - 0.15
-        a1 = fade(t, T.TITLE_IN, 0.5, out_t, 0.3)
-        blit_text(frame, text_layer("You're 20.", SERIF, 190, (255, 255, 255)), W / 2, 850, a1,
-                  dy=(1 - ease_out((t - T.TITLE_IN) / 0.7)) * 26)
-        a2 = fade(t, T.SUB_IN, 0.4, out_t, 0.3)
-        blit_text(frame, text_layer("Your whole life, in weeks.", INTER_L, 46, (170, 174, 186)),
-                  W / 2, 1010, a2)
+    # --- hook: title is on screen from the first frames
+    if t < T.TITLE_OUT + 0.3:
+        a1 = fade(t, 0.0, 0.09, T.TITLE_OUT - 0.08, 0.18)
+        blit_text(frame, text_layer("If you're 20,", SERIF, 200, (255, 255, 255)), W / 2, 830, a1,
+                  dy=(1 - ease_out(t / 0.28)) * 46)
+        a2 = fade(t, 0.30, 0.2, T.TITLE_OUT - 0.08, 0.18)
+        blit_text(frame, text_layer("this is your whole life.", INTER_L, 50, (200, 204, 214)),
+                  W / 2, 1000, a2)
 
     # --- grid
     if t >= T.GRID_IN:
-        dim = 1.0 - 0.86 * smooth((t - T.RISER_START) / 0.5)
-        g = grid_image(t, dim)
-        frame[GY0:GY0 + ROWS * P, GX0:GX0 + COLS * P] = g
+        frame[GY0:GY0 + ROWS * P, GX0:GX0 + COLS * P] = grid_image(t, 1.0)
 
     # --- caption block over the grid
     step = None
     for s in T.STEPS:
         if t >= s["t0"]:
             step = s
-    if t >= T.COUNT_IN and t < T.RISER_START:
+    if T.COUNT_IN <= t < T.DROP:
         if step is None:  # "80 years / 4,160 weeks"
-            p = ease_out((t - T.COUNT_IN) / 0.9)
-            a = fade(t, T.COUNT_IN, 0.3)
+            p = ease_out((t - T.COUNT_IN) / 0.6)
+            a = fade(t, T.COUNT_IN, 0.1)
             blit_text(frame, text_layer("80 YEARS", INTER_SB, 30, (150, 156, 170), tracking=8), W / 2, 240, a)
             blit_text(frame, text_layer(f"{int(round(p * T.TOTAL_WEEKS)):,} weeks", SERIF, 150, (255, 255, 255)),
                       W / 2, 345, a)
         else:
             p = ease_io((t - step["t0"] - T.FILL_DELAY) / T.FILL_DUR)
-            a = fade(t, step["t0"], 0.14)
+            a = fade(t, step["t0"], 0.07)
             yrs = int(round(p * step["years"]))
             blit_text(frame, text_layer(step["label"], INTER_SB, 30, step["color"], tracking=8), W / 2, 240, a)
             unit = "year" if yrs == 1 else "years"
             blit_text(frame, text_layer(f"{yrs} {unit}", SERIF, 150, (255, 255, 255)), W / 2, 345, a)
-        # footnote
         blit_text(frame, text_layer("1 dot = 1 week  ·  ages 0 – 80  ·  rough estimate", INTER_L, 26,
-                                    (130, 134, 146)), W / 2, GY0 + ROWS * P + 52, fade(t, T.COUNT_IN + 0.4, 0.5))
-
-    # --- disconnect lines
-    if t >= T.DISCONNECT_IN:
-        a1 = fade(t, T.DISCONNECT_IN, 0.35)
-        blit_text(frame, text_layer("What if you", SERIF, 150, (255, 255, 255)), W / 2, 790, a1,
-                  dy=(1 - ease_out((t - T.DISCONNECT_IN) / 0.5)) * 24)
-        a2 = fade(t, T.DISCONNECT2_IN, 0.35)
-        blit_text(frame, text_layer("disconnected?", SERIF_I, 170, (255, 255, 255)), W / 2, 950, a2,
-                  dy=(1 - ease_out((t - T.DISCONNECT2_IN) / 0.5)) * 24)
+                                    (130, 134, 146)), W / 2, GY0 + ROWS * P + 52, fade(t, T.COUNT_IN + 0.2, 0.3))
 
     # --- status bar: battery drains with the "life" being used up
     counts = lit_counts(t)
-    used = sum(counts[:5])
-    pct = 100.0 * (1 - used / T.TOTAL_WEEKS)
+    pct = 100.0 * (1 - sum(counts[:4]) / T.TOTAL_WEEKS)
     status_bar(frame, t, pct, charging=False)
 
-    # global fade-in
-    frame *= smooth(t / 0.4)
+    # --- camera + alarm flash on the SCREENS block
+    frame = camera(frame, t)
+    sc = T.STEPS[3]
+    dt = t - sc["t0"]
+    if 0 <= dt < 0.5:
+        frame[..., 0] += 110 * math.exp(-dt / 0.18) * edge_mask()
+    # split-second dip to black right before the drop (the music is sucked out too)
+    if T.SUCKOUT[0] <= t < T.SUCKOUT[1]:
+        frame *= 0.10
     return np.clip(frame, 0, 255).astype(np.uint8)
 
 
@@ -380,14 +412,13 @@ def vignette():
     return _VIG_BOTTOM
 
 
-ZOOM = 1.10
-SRC_W, SRC_H = int(round(W * ZOOM)), int(round(H * ZOOM))
+SRC_W, SRC_H = W, H
 
 
 def decode(clip, ss, n_frames, cx):
     path = os.path.join(ASSETS, "clips", f"{clip}.mp4")
     vf = (f"scale=-2:{SRC_H}:flags=lanczos,crop={SRC_W}:{SRC_H}:(iw-{SRC_W})*{cx}:0,"
-          f"fps={FPS},eq=contrast=1.06:saturation=1.10:gamma=0.97,unsharp=5:5:0.5")
+          f"fps={FPS},eq=contrast=1.08:saturation=1.14:gamma=0.97,unsharp=5:5:0.6")
     cmd = ["ffmpeg", "-v", "error", "-ss", f"{ss}", "-i", path, "-vf", vf, "-frames:v", str(n_frames),
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-"]
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
@@ -405,45 +436,76 @@ rng = np.random.default_rng(11)
 
 
 def render_clips():
-    f_global = T.DROP_FRAME
     vig = vignette()
-    for si, (clip, ss, cx, beats, lines) in enumerate(T.SHOTS):
-        n = beats * 18
-        if si == len(T.SHOTS) - 1:
-            n += T.FADE_FRAMES          # last shot carries the fade-out
+    last_i = len(T.SHOTS) - 1
+    for si, (clip, ss, cx, eighths, lines) in enumerate(T.SHOTS):
+        f0 = T.BOUNDS[si]
+        n = T.BOUNDS[si + 1] - f0
+        if si == last_i:
+            n += T.FADE_FRAMES              # last shot carries the fade-out
         last, done = None, 0
         for j, src in enumerate(decode(clip, ss, n, cx)):
             last = src
             done = j + 1
-            yield f_global + j, compose_clip(src, si, j, n, f_global + j, vig, lines)
-        # safety: if the source ended early, hold the last frame
-        for j in range(done, n):
-            yield f_global + j, compose_clip(last, si, j, n, f_global + j, vig, lines)
-        f_global += n
+            yield f0 + j, compose_clip(src, si, j, n, f0 + j, vig, lines)
+        for j in range(done, n):            # source ended early -> hold last frame
+            yield f0 + j, compose_clip(last, si, j, n, f0 + j, vig, lines)
+
+
+def blit_text_scaled(frame, layer, cx, cy, opacity, scale, dy=0):
+    if abs(scale - 1.0) < 0.01:
+        return blit_text(frame, layer, cx, cy, opacity, dy)
+    rgb, a, sh = layer
+    h, w = a.shape
+    size = (max(1, int(w * scale)), max(1, int(h * scale)))
+    a2 = np.asarray(Image.fromarray(a).resize(size, Image.BILINEAR), np.float32)
+    sh2 = None if sh is None else np.asarray(Image.fromarray(sh).resize(size, Image.BILINEAR), np.float32)
+    blit_text(frame, (rgb, a2, sh2), cx, cy, opacity, dy)
 
 
 def compose_clip(src, si, j, n, fg, vig, lines):
     t = fg / FPS
     prog = j / max(1, n - 1)
-    z = 1.0 + 0.085 * ease_io(prog)
+    rapid = len(lines) == 0
+    # punch-in on the beat that relaxes into a slow push
+    z = 1.0 + (0.20 if si == 0 else 0.13) * math.exp(-j / 3.2) + 0.07 * prog
     ww, hh = W / z, H / z
-    x0, y0 = (SRC_W - ww) / 2, (SRC_H - hh) / 2
+    x0, y0 = (W - ww) / 2, (H - hh) / 2
     im = Image.fromarray(src).resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + ww, y0 + hh))
     frame = np.asarray(im, np.float32) * vig
 
-    # captions
+    # chromatic split on the first frames of every cut
+    if j < 4:
+        sh = int(14 * (1 - j / 4))
+        if sh:
+            frame[..., 0] = np.roll(frame[..., 0], sh, axis=1)
+            frame[..., 2] = np.roll(frame[..., 2], -sh, axis=1)
+
+    # captions: pop in with overshoot
     gold = si == len(T.SHOTS) - 1
     col = (255, 255, 255) if gold else WARM
     ys = [1330] if len(lines) == 1 else [1262, 1396]
     for li, line in enumerate(lines):
-        d0 = 2 + li * 3
-        a = smooth((j - d0) / 6.0)
-        dy = (1 - ease_out((j - d0) / 10.0)) * 30
+        d0 = 1 + li * 3
+        a = smooth((j - d0) / 3.0)
+        p = clamp01((j - d0) / 9.0)
+        scale = 1.0 + 0.45 * (1 - ease_out(p)) ** 1.5
         path = SERIF_I if (li == len(lines) - 1 and len(lines) > 1) else SERIF
-        blit_text(frame, text_layer(line, path, 136, col, shadow=True), W / 2, ys[li], a, dy=dy)
+        blit_text_scaled(frame, text_layer(line, path, 150, col, shadow=True), W / 2, ys[li], a, scale)
+
+    # closing call to action
+    if si == len(T.SHOTS) - 1:
+        cj = int(round((T.CTA_AT - T.CUTS[-1]) * FPS))
+        ca = smooth((j - cj) / 6.0)
+        if ca > 0:
+            blit_text_scaled(frame, text_layer("Start living.", SERIF_I, 104, (255, 214, 140), shadow=True),
+                             W / 2, 1560, ca, 1.0 + 0.25 * (1 - ease_out((j - cj) / 10.0)))
 
     # white flash on the beat
-    fl = 0.75 * max(0.0, 1 - j / (10.0 if si == 0 else 6.0)) ** 1.5
+    if si == 0:
+        fl = 0.95 * max(0.0, 1 - j / 9.0) ** 1.4
+    else:
+        fl = (0.45 if rapid else 0.60) * max(0.0, 1 - j / 5.0) ** 1.5
     if fl > 0:
         frame = frame + (255 - frame) * fl
 
@@ -466,18 +528,29 @@ def compose_clip(src, si, j, n, fg, vig, lines):
 # ----------------------------------------------------------------------- main
 
 
-def build_audio(path):
-    os.makedirs(OUT, exist_ok=True)
-    sfx_path = os.path.join(OUT, "_sfx.wav")
-    sfx.build(sfx_path)
-    music = os.path.join(ASSETS, "music", "drawing_the_sky.mp3")
-    d = T.TOTAL_SEC
-    fc = (f"[0:a]atrim=0:{d + 0.2},asetpts=PTS-STARTPTS,volume=0.95,afade=t=out:st={d - 1.9}:d=1.9[m];"
-          f"[1:a]atrim=0:{d + 0.2},volume=0.75[s];"
-          f"[m][s]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95,"
-          f"loudnorm=I=-14:TP=-1.5:LRA=9[a]")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", music, "-i", sfx_path, "-filter_complex", fc,
-                    "-map", "[a]", "-ar", "44100", "-ac", "2", path], check=True)
+def mux(video, wav, out):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", wav, "-map", "0:v", "-map", "1:a",
+                    "-c:v", "copy", "-af", "loudnorm=I=-14:TP=-1.5:LRA=9", "-c:a", "aac", "-b:a", "192k",
+                    "-t", f"{T.TOTAL_SEC:.3f}", "-movflags", "+faststart", out], check=True)
+
+
+def render_video(path):
+    enc = subprocess.Popen(
+        ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
+         "-i", "-", "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p",
+         "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-maxrate", "14M", "-bufsize", "28M",
+         "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-an", path],
+        stdin=subprocess.PIPE)
+    with Pool(4) as pool:
+        for i, fr in enumerate(pool.imap(render_intro, range(T.DROP_FRAME), chunksize=4)):
+            enc.stdin.write(fr.tobytes())
+    last = None
+    for fg, fr in render_clips():
+        enc.stdin.write(fr.tobytes())
+        last = fg
+    assert last == T.TOTAL_FRAMES - 1, (last, T.TOTAL_FRAMES)
+    enc.stdin.close()
+    enc.wait()
 
 
 def main():
@@ -491,33 +564,17 @@ def main():
             print("saved", tt)
         return
 
-    audio = os.path.join(OUT, "_mix.wav")
-    build_audio(audio)
-    final = os.path.join(OUT, "life_in_weeks.mp4")
-    enc = subprocess.Popen(
-        ["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS),
-         "-i", "-", "-i", audio,
-         "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv420p",
-         "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-maxrate", "14M", "-bufsize", "28M", "-colorspace", "bt709", "-color_primaries", "bt709",
-         "-color_trc", "bt709", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "-shortest", final],
-        stdin=subprocess.PIPE)
-
-    with Pool(4) as pool:
-        for i, fr in enumerate(pool.imap(render_intro, range(T.DROP_FRAME), chunksize=4)):
-            enc.stdin.write(fr.tobytes())
-            if i % 60 == 0:
-                print("intro", i, "/", T.DROP_FRAME, flush=True)
-
-    last = None
-    for fg, fr in render_clips():
-        enc.stdin.write(fr.tobytes())
-        last = fg
-        if fg % 60 == 0:
-            print("clips", fg, flush=True)
-    assert last == T.TOTAL_FRAMES - 1, (last, T.TOTAL_FRAMES)
-    enc.stdin.close()
-    enc.wait()
-    print("done ->", final)
+    video = os.path.join(OUT, "_video.mp4")
+    if "--audio-only" not in sys.argv:
+        render_video(video)
+        print("video rendered", flush=True)
+    wav = os.path.join(OUT, "_mix.wav")
+    audio.build_mix(wav, with_music=True)
+    mux(video, wav, os.path.join(OUT, "life_in_weeks.mp4"))
+    wav2 = os.path.join(OUT, "_mix_nomusic.wav")
+    audio.build_mix(wav2, with_music=False)
+    mux(video, wav2, os.path.join(OUT, "life_in_weeks_no_music.mp4"))
+    print("done")
 
 
 if __name__ == "__main__":
