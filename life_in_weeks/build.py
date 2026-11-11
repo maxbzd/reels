@@ -202,7 +202,7 @@ def blit_arr(frame, arr, x, y, opacity=1.0, anchor="l"):
     frame[sl] = frame[sl] * (1 - al) + rgb[sub] * al
 
 
-STATUS_Y = 297
+STATUS_Y = 150
 
 
 def status_bar(frame, t, pct, charging):
@@ -228,9 +228,9 @@ def status_bar(frame, t, pct, charging):
 COLS, ROWS = 52, 80
 PX, PY = 10, 9                 # cell size; dots are slightly flattened ovals
 GX0 = (W - COLS * PX) // 2     # grid is centred on the screen
-GY0 = 492                      # grid spans y 492 .. 1212
+GY0 = 456                      # grid spans y 456 .. 1176
 UNLIT = np.array([34, 35, 46], np.float32)
-TOP_LABEL_Y, TOP_NUM_Y, FOOT_Y = 352, 438, 1238
+TOP_LABEL_Y, TOP_NUM_Y, FOOT_Y = 322, 402, 1200
 
 
 def _make_sprite():
