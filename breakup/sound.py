@@ -148,6 +148,9 @@ def build_sfx(total):
     return buf
 
 
+MUSIC_LEVEL = 0.45          # overall music level (0.95 was the first version; lower = quieter)
+
+
 def music_gain(total):
     """instrumental underscore: barely there under the typing and messages, swelling into the two big
     moments (the "47 min later" slam and the Block tap) and ducked away for the lock card."""
@@ -166,7 +169,7 @@ def build_mix(path, with_music=True):
         m = lw.load_audio(os.path.join(HERE, "assets", "music", "time.mp3"), 1.0, stereo=True)
         n = int(total * SR)
         m = m[:n] if len(m) >= n else np.vstack([m, np.zeros((n - len(m), 2))])
-        mix = m * music_gain(total)[:, None] * 0.95 + sfx * 0.90
+        mix = m * music_gain(total)[:, None] * MUSIC_LEVEL + sfx * 0.90
     else:
         mix = sfx * 1.15
     mix = np.tanh(mix * 0.9) / np.tanh(0.9)
