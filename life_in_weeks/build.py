@@ -226,15 +226,15 @@ def status_bar(frame, t, pct, charging):
 # Instagram safe zones (1080x1920): keep everything between y=270 and y=1250, x>=65,
 # and keep anything important left of ~900 px (right-hand buttons).
 COLS, ROWS = 52, 80
-PX, PY = 11, 9                 # cell size; dots are slightly flattened ovals
-GX0 = 158
+PX, PY = 10, 9                 # cell size; dots are slightly flattened ovals
+GX0 = (W - COLS * PX) // 2     # grid is centred on the screen
 GY0 = 492                      # grid spans y 492 .. 1212
 UNLIT = np.array([34, 35, 46], np.float32)
 TOP_LABEL_Y, TOP_NUM_Y, FOOT_Y = 352, 438, 1238
 
 
 def _make_sprite():
-    rx, ry = 4.1, 3.3
+    rx, ry = 3.8, 3.3
     cx, cy = (PX - 1) / 2.0, (PY - 1) / 2.0
     yy, xx = np.mgrid[0:PY, 0:PX].astype(np.float32)
     d = np.sqrt(((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2)
@@ -352,13 +352,15 @@ def camera(frame, t):
 
 
 LEGEND_MAX_X = 900            # nothing right of this: Instagram's like/comment/share column
+LEGEND_MIN_X = 65
 
 
 def side_labels(frame, t):
-    """name + bracket right of each block (kept left of 900 px), years on the left"""
+    """grid stays centred: block names + bracket on its left, years on its right"""
     names = {"gone": ["Gone"], "sleep": ["Sleep"], "workchores": ["Work &", "chores"],
              "screens": ["Screens"], "living": ["Left to", "live"]}
-    xr = GX0 + COLS * PX
+    xl = GX0 - 14                       # bracket sits just left of the grid
+    xr = GX0 + COLS * PX + 16           # years start just right of the grid
     for s in T.STEPS:
         if t < s["t0"] or t >= T.DROP:
             continue
@@ -368,23 +370,24 @@ def side_labels(frame, t):
         r1 = (s["start"] + s["n"]) / COLS
         y0 = GY0 + r0 * PY
         y1 = GY0 + (r0 + (r1 - r0) * max(p, 0.02)) * PY
-        xb = xr + 12
         ya, yb = int(y0 + 2), int(max(y0 + 6, y1 - 2))
         col = np.array(s["color"], np.float32)
-        reg = frame[ya:yb, xb:xb + 3]
-        frame[ya:yb, xb:xb + 3] = reg * (1 - 0.9 * a) + col * 0.9 * a
+        reg = frame[ya:yb, xl - 3:xl]
+        frame[ya:yb, xl - 3:xl] = reg * (1 - 0.9 * a) + col * 0.9 * a
         yc = (y0 + y1) / 2
         lines = names[s["key"]]
         for i, line in enumerate(lines):
-            lay = text_layer(line, INTER_SB, 34, light(s["color"], 0.25))
+            lay = text_layer(line, INTER_SB, 36, light(s["color"], 0.25))
             w = lay[1].shape[1] - 12
-            assert xb + 18 + w <= LEGEND_MAX_X, (line, xb + 18 + w)
-            dy = (i - (len(lines) - 1) / 2) * 40
-            blit_text(frame, lay, xb + 18 + w / 2, yc + dy, a)
+            right = xl - 3 - 16                          # names are right-aligned to the bracket
+            assert right - w >= LEGEND_MIN_X, (line, right - w)
+            dy = (i - (len(lines) - 1) / 2) * 42
+            blit_text(frame, lay, right - w / 2, yc + dy, a)
         yrs = int(round(p * s["years"]))
-        lay = text_layer(f"{yrs}y", INTER_SB, 38, light(s["color"], 0.25))
+        lay = text_layer(f"{yrs}y", INTER_SB, 36, light(s["color"], 0.25))
         w = lay[1].shape[1] - 12
-        blit_text(frame, lay, GX0 - 14 - w / 2, yc, a)
+        assert xr + w <= LEGEND_MAX_X, (yrs, xr + w)
+        blit_text(frame, lay, xr + w / 2, yc, a)
 
 
 def render_intro(f):
