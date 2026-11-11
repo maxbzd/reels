@@ -148,7 +148,7 @@ def build_sfx(total):
     return buf
 
 
-MUSIC_LEVEL = 0.45          # overall music level (0.95 was the first version; lower = quieter)
+MUSIC_LEVEL = 0.14          # overall music level (0.95 was the first version; lower = quieter)
 
 
 def music_gain(total):
