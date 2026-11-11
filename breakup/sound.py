@@ -1,8 +1,8 @@
 """Soundtrack for 'The breakup': synthesised chat sounds + Luminary under it.
 
 Everything is placed from script.py, so picture and sound cannot drift apart.
-Music is used at natural speed: its swell peaks at 7.06 s ("47 min later") and its biggest
-second-half hit is at 24.86 s (the finger presses Block).
+Music: Lewis Capaldi - Someone You Loved (preview), natural speed: hit at 6.93 s ("47 min later"),
+hit at 24.88 s (the finger presses Block).
 """
 import os
 import sys
@@ -149,10 +149,12 @@ def build_sfx(total):
 
 
 def music_gain(total):
-    """keyframed loudness of the track so that chat sounds stay readable but the key moments land"""
-    key = [(0.0, 0.55), (5.5, 0.60), (6.3, 0.95), (7.06, 1.0), (7.5, 0.80), (8.6, 0.55), (18.5, 0.55),
-           (20.5, 0.72), (24.5, 0.85), (S.BLOCK_TAP, 1.0), (S.BLOCK_TAP + 0.25, 0.32), (26.1, 0.34), (26.7, 0.55),
-           (S.CTA_IN - 0.05, 0.60), (S.CTA_IN + 0.35, 1.0), (29.2, 1.0), (total, 0.0)]
+    """keyframed loudness: the track has vocals, so it sits low under the typing and rises on the hits
+    (6.93 s "47 min later", 24.88 s Block) and in the natural dips (7.5-10 s, 16-17 s)"""
+    key = [(0.0, 0.50), (5.8, 0.55), (S.SWELL - 0.5, 0.85), (S.SWELL, 1.0), (S.SWELL + 0.5, 0.90), (8.2, 0.90),
+           (10.2, 0.75), (11.0, 0.50), (15.0, 0.50), (16.0, 0.75), (17.3, 0.75), (18.0, 0.50), (21.0, 0.55),
+           (24.3, 0.80), (S.BLOCK_TAP, 1.0), (S.BLOCK_TAP + 0.22, 0.26), (26.3, 0.28), (26.9, 0.50),
+           (S.CTA_IN, 0.90), (28.8, 0.90), (total, 0.0)]
     ts, gs = zip(*key)
     t = np.arange(int(total * SR)) / SR
     return np.interp(t, ts, gs)
@@ -162,7 +164,7 @@ def build_mix(path, with_music=True):
     total = S.DURATION + 0.15
     sfx = build_sfx(total)
     if with_music:
-        m = lw.load_audio(os.path.join(HERE, "assets", "music", "luminary.mp3"), 1.0, stereo=True)
+        m = lw.load_audio(os.path.join(HERE, "assets", "music", "someone_you_loved.mp3"), 1.0, stereo=True)
         n = int(total * SR)
         m = m[:n] if len(m) >= n else np.vstack([m, np.zeros((n - len(m), 2))])
         mix = m * music_gain(total)[:, None] * 0.95 + sfx * 0.85

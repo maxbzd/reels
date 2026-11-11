@@ -1,8 +1,9 @@
 """'The breakup' - 30 s chat reel.  Single source of truth for the script and all timing.
 
-Music: Joel Sunny - Luminary, used at natural speed:
-  * its swell peaks at 7.06 s   -> the "47 min later" slam
-  * its strongest hit of the 2nd half is at 24.86 s -> the finger presses BLOCK
+Music: Lewis Capaldi - Someone You Loved (30 s preview), natural speed:
+  * hit at 6.93 s  -> the "47 min later" slam; the track then drops to near-silence (dialogue breathes)
+  * dips again at 16-17 s ("I know when you're sad"), builds from 18 s
+  * hit at 24.88 s -> the finger presses BLOCK
 """
 import zlib
 
@@ -12,8 +13,8 @@ FPS = 30
 DURATION = 30.0
 TOTAL_FRAMES = int(DURATION * FPS)
 
-SWELL = 7.06            # music peak == "47 min later" slams in
-BLOCK_HIT = 24.86       # music hit == finger presses Block
+SWELL = 6.93            # music hit == "47 min later" slams in
+BLOCK_HIT = 24.88       # music hit == finger presses Block
 
 # ------------------------------------------------------------------ chat
 # side: "ig" (Instagram, left) | "me" (you, right) | "ts" (timestamp label) | "fail" (undelivered IG message)
@@ -41,7 +42,7 @@ MSGS = [
 CLOCK = [(0.0, "12:25"), (7.60, "1:12"), (22.40, "1:13")]
 
 # ------------------------------------------------------------------ time skip
-SKIP_IN = 6.30           # chat dims
+SKIP_IN = 6.05           # chat dims
 SKIP_SLAM = SWELL        # "47 min later" hits with the music
 SKIP_OUT = 8.30          # chat comes back
 
