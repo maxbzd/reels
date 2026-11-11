@@ -793,7 +793,7 @@ def render(f):
 # ----------------------------------------------------------------- main
 def mux(video, wav, out):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", video, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "copy",
-                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=9", "-c:a", "aac", "-b:a", "192k", "-t", f"{S.DURATION}",
+                    "-af", "loudnorm=I=-14:TP=-2:LRA=9,alimiter=limit=0.89:level=disabled", "-c:a", "aac", "-b:a", "192k", "-t", f"{S.DURATION}",
                     "-movflags", "+faststart", out], check=True)
 
 

@@ -10,5 +10,5 @@ No footage: the whole phone UI (bubbles, typing dots, keyboard, alert, touch ind
 
 * `script.py` - the script (messages, timing, clock) - edit the text here
 * `render.py` - picture; `sound.py` - synthesised chat sounds + music mix
-* music: assets/music/someone_you_loved.mp3 (Lewis Capaldi, 30 s preview supplied by the author): about being
-  hooked and "going under"; its hits land on "47 min later" (6.93 s) and on the Block tap (24.88 s).
+* music: assets/music/time.mp3 (Hans Zimmer - Time, 30 s instrumental preview supplied by the author), kept very quiet;
+  swap the file + edit `music_gain()` in sound.py to try another track.

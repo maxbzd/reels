@@ -1,9 +1,8 @@
 """'The breakup' - 30 s chat reel.  Single source of truth for the script and all timing.
 
-Music: Lewis Capaldi - Someone You Loved (30 s preview), natural speed:
-  * hit at 6.93 s  -> the "47 min later" slam; the track then drops to near-silence (dialogue breathes)
-  * dips again at 16-17 s ("I know when you're sad"), builds from 18 s
-  * hit at 24.88 s -> the finger presses BLOCK
+Music: Hans Zimmer - Time (instrumental, quiet underscore).  The two big moments are driven by sound design:
+  * 6.93 s  -> the "47 min later" slam
+  * 24.88 s -> the finger presses BLOCK
 """
 import zlib
 
